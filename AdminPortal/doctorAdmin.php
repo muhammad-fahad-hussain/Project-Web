@@ -437,8 +437,9 @@
                             <td>' . $row['contact'] . '</td>
                             <td>' . $row['gender'] . '</td>
                             <td class="paddingRowImg">
-                            <button class="btn btn-primary text-center updateBtnTb">Update</button>
-                                <button class="btn btn-danger mx-2" data-bs-toggle="modal"
+                            <button class="btn btn-success text-center viewBtnTb">View</button>
+                            <button class="btn btn-primary text-center mx-2 updateBtnTb">Edit</button>
+                                <button class="btn btn-danger" data-bs-toggle="modal"
                                     data-bs-target="#deletemodal">Delete</button>
                             </td>
                         </tr>';
@@ -453,9 +454,52 @@
         </div>
     </main>
 
+    <!-- View Doctor -->
+
+    <div class="modal" id="view_Modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">View Record</h4>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="viewing_data">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+
+        $(document).ready(function () {
+            $('.viewBtnTb').click(function (e) {
+                e.preventDefault();
+
+                var id = $(this).closest('tr').find('.doctorID').text();
+                // alert(id);
+
+                $.ajax({
+                    type: "POST",
+                    url: "AdminPHPFile.php",
+                    data: {
+                        'checking_viewbtn': true,
+                        'id_': id,
+                    },
+                    success: function (response) {
+                        // alert(response);
+                        $('.viewing_data').html(response);
+                        $('#view_Modal').modal('show');
+
+                    }
+                });
+            });
+        });
+    </script>
 
 
-
+    <!-- update doctor -->
     <div class="modal" id="UpdateDoctormodel">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">

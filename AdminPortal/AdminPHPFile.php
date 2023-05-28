@@ -184,4 +184,104 @@ if (isset($_POST['checking_viewbtn_update'])) {
        
     }
 
+
+    // view
+    
+// view
+if(isset($_POST['checking_viewbtn']))
+{
+    $id = $_POST['id_'];
+    
+    $query = "SELECT * FROM doctor AS d INNER JOIN employees AS e ON d.doctor_id=e.doctor_id INNER JOIN employees_portal AS ep ON ep.employee_id=e.employee_id INNER JOIN department AS dept ON dept.dept_no=d.dept_no INNER JOIN speciality AS s ON s.speciality_id=d.speciality_id WHERE d.doctor_id ='$id'";
+    $result = mysqli_query($conn,$query);
+    if(mysqli_num_rows($result)>0)
+    {
+        foreach($result as $row)
+        {
+            // while($row=mysqli_fetch_assoc($result))
+        
+            $id=$row['doctor_id'];
+            $name=$row['name'];
+            echo '                
+            <div class="row ">
+            <div class="col-md-4">
+                <img src="data:image/jpeg;base64,' . base64_encode($row['image']).'" alt="" class="img-fluid pt-3 pb-3 px-2">
+            </div>
+            <div class="col-md-8">
+            <p for="" class=" display-6 px-3">Doctor ID: '.$id.'</p>
+                <div class="row pt-1 px-4">
+                    <div class="col-md-6 px-3">
+                        <div style="font-size: 1.1em;">
+                            <label for="" class="form-">Name:</label>
+                             <p class="text-muted">'.$name.'</p>
+                        </div>
+                        <div style="font-size: 1.1em;">
+                            <label for="" class="form-">Speciality:</label>
+                             <p class="text-muted">'.$row['speciality_name'].'</p>
+                        </div>
+                        <div style="font-size: 1.1em;">
+                            <label for="" class="form-">Experience:</label>
+                             <p class="text-muted">'.$row['experience'].'</p>
+                        </div>  
+                        <div style="font-size: 1.1em;">
+                            <label for="" class="form-">Contact:</label>
+                             <p class="text-muted">'.$row['contact'].'</p>
+                        </div>
+                        <div style="font-size: 1.1em;">
+                            <label for="" class="form-">Portal Password:</label>
+                             <p class="text-muted">'.$row['password'].'</p>
+                        </div>
+                        <div style="font-size: 1.1em;">
+                            <label for="" class="form-">Address:</label>
+                             <p class="text-muted">'.$row['address'].'</p>
+                        </div>
+                                                            
+                        
+                    </div>
+
+                    <div class="col-md-6">
+                        <div style="font-size: 1.1em;">
+                            <label for="" class="form-">Department:</label>
+                             <p class="text-muted">'.$row['dept_name'].'</p>
+                        </div>
+                        <div style="font-size: 1.1em;">
+                            <label for="" class="form-">Data of Births:</label>
+                             <p class="text-muted">'.$row['dob'].'</p>
+                        </div>
+                        
+                        <div style="font-size: 1.1em;">
+                            <label for="" class="form-">Education:</label>
+                             <p class="text-muted">'.$row['education'].'</p>
+                        </div>
+                        <div style="font-size: 1.1em;">
+                            <label for="" class="form-">Salary:</label>
+                             <p class="text-muted">RS: '.$row['salary'].'</p>
+                        </div>
+                        <div style="font-size: 1.1em;">
+                            <label for="" class="form-">Timing:</label>
+                             <p class="text-muted">'.$row['shiftTiming'].'</p>
+                        </div>
+                        <div style="font-size: 1.1em;">
+                            <label for="" class="form-">Gender:</label>
+                             <p class="text-muted">'.$row['gender'].'</p>
+                        </div>
+                        
+                    </div>
+
+                </div>
+                <div style="font-size: 1.1em;" class="mt-3 px-4">
+                    <label for="" class="pb-2 display-6">About:</label>
+                     <p style="font-size: 1em;" class="text-muted">'.$row['about'].'</p>
+                </div>
+            </div>
+        </div>
+              
+            ';
+
+        }
+        
+  }      
+}
+
+
 ?>

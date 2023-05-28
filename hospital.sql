@@ -148,7 +148,8 @@ VALUES
   (34, 'Family Medicine', 4),
   (35, 'Occupational Therapy', 14);
 
-  select s.speciality_id,s.speciality_name from speciality as s inner join department as d on s.dept_no=d.dept_no;
+  select s.speciality_id,s.speciality_name from speciality as s inner join department as d 
+  on s.dept_no=d.dept_no where d.dept_no=3;
   
   select d.dept_name,COUNT(s.speciality_name) from speciality s inner join department d 
   on d.dept_no=s.dept_no group by dept_name having COUNT(s.speciality_name)>2;
