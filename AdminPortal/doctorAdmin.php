@@ -11,8 +11,9 @@
     <script src="adminJS.js"></script>
     <script src="bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
-    <script src="bootstrap-5.1.3-dist/js/jquery-3.5.1.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
     <title>Admin Portal</title>
 
 </head>
@@ -313,171 +314,6 @@
     <!-- update modal -->
 
 
-    <div class="modal" id="UpdateDoctormodel">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3>Update data</h3>
-                    <button class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-
-                    <form action="" name="updateDoctorform">
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="" class="form-label">Doctor Name:</label>
-                                <input type="text" name="" id="doctor_name_U" placeholder="Enter Doctor Name"
-                                    class="form-control mt-2" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="" class="form-label">Select department</label>
-                                <select name="department" id="department" class="form-select text-dark mt-2" required>
-                                    <?php
-                                    include "connection.php";
-                                    $dept_query = "SELECT dept_no, dept_name FROM department";
-                                    $department_result = mysqli_query($conn, $dept_query);
-                                    foreach ($department_result as $row) {
-                                        echo "<option value='" . $row['dept_no'] . "'>" . $row['dept_name'] . "</option>";
-                                    }
-                                    $conn->close();
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-6">
-                                <label for="" class="form-label">Select Speciality</label>
-                                <select name="speciality" id="speciality" class="form-select text-dark mt-2" required>
-                                    <option value="Select Speciality" class="" selected>Select
-                                        Speciality</option>
-                                    <script>
-                                        $(document).ready(function () {
-                                            $('#department').on('change', function (event) {
-                                                var dept_id = $(this).val();
-                                                //   alert(dept_id);
-                                                $.post(
-                                                    "AdminPHPFile.php",
-                                                    { department: dept_id },
-                                                    function (data) {
-                                                        $("#speciality").html(data);
-                                                    }
-                                                );
-                                            });
-                                        });
-                                    </script>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="" class="form-label">Contact</label>
-                                <input type="tel" name="" id="doctor_phone_U" placeholder="0300-3234123"
-                                    class="form-control mt-2 " required>
-                            </div>
-
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-6">
-                                <label for="" class="form-label">Date of Birth</label>
-                                <input type="date" name="" id="dob_doctor_U" class="form-control mt-2"
-                                    placeholder="12/12/2002" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="" class="form-label">Experience</label>
-                                <input type="number" placeholder="Enter Experience" name="" id="experience_doctor_U"
-                                    class="form-control mt-2" required>
-                            </div>
-
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-6">
-                                <label for="" class="form-label">Address</label>
-                                <input type="text" name="" id="" class="form-control mt-2" placeholder="Enter Address"
-                                    required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="" class="form-label">Education</label>
-                                <input type="text" name="" id="" class="form-control mt-2"
-                                    placeholder="Enter Education 1" required>
-                            </div>
-
-
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-6">
-                                <label for="" class="form-label">Password</label>
-                                <input type="text" name="" id="password_doctor" class="form-control mt-2"
-                                    placeholder="Choose a password" minlength="5" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="" class="form-label">Select Timing</label>
-                                <select name="" id="" class="form-select text-dark mt-2" required>
-                                    <option value="Select Speciality" class="" selected>Select
-                                        Timing</option>
-                                    <option value="8:00">08:00AM to 04:00PM</option>
-                                    <option value="16:00">04:00AM to 12:00AM</option>
-                                    <option value="23:59">12:00AM to 8:00AM</option>
-                                    <option value="Emergency">Emergency</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-8">
-                                <label for="" class="form-label">About</label>
-                                <textarea class="form-control" name="" id="" rows="5" placeholder="About"
-                                    required></textarea>
-                            </div>
-                        </div>
-                        <input type="submit" name="" id="" class="btn  btn-primary mt-3" onclick="UpdateDoctorform()">
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        $(document).ready(function () {
-            $('.updateBtnTb').click(function (e) { 
-                e.preventDefault();
-                var id=$(this).closest('tr').find('.doctorID').text();
-                alert(id);
-                $.ajax({
-                    type: "POST",
-                    url: "AdminPHPFile.php",
-                    data: {
-                        'doctor_updateBtn':true,
-                        'doctor_id':id,
-                    },
-                    success: function (response) {
-                        $.each(response, function (key, value) { 
-                             
-                        });
-                    }
-                });
-                
-            });
-        });
-    </script>
-
-    <!-- end update function -->
-    <!-- Delete Button Modal -->
-    <div class="modal" id="deletemodal">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3>Confirm Delete</h3>
-                    <button class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you confirming?</p>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary">Yes</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- 
         ============================
                 Doctor
@@ -584,7 +420,7 @@
                         </tr>
                         <!-- ussing php for the read data in databasse -->
                         <?php
-                        include "connection.php";
+                        $conn = new mysqli("localhost", "root", "", "hospital_project");
                         $query = "SELECT * FROM doctor AS d INNER JOIN employees AS e ON d.doctor_id=e.doctor_id INNER JOIN employees_portal AS ep on ep.employee_id=e.employee_id INNER JOIN speciality AS s on s.speciality_id=d.speciality_id INNER JOIN department AS dept on dept.dept_no=d.dept_no;";
                         $result = mysqli_query($conn, $query);
                         foreach ($result as $row) {
@@ -594,7 +430,7 @@
 
                             </td>
                             <td class="doctorID">' . $row['doctor_id'] . '</td>
-                            <td>' . $row['employee_id'] . '</td>
+                            <td id="emp_id">' . $row['employee_id'] . '</td>
                             <td>' . $row['name'] . '</td>
                             <td>' . $row['dept_name'] . '</td>
                             <td>' . $row['speciality_name'] . '</td>
@@ -617,6 +453,73 @@
         </div>
     </main>
 
+
+
+
+    <div class="modal" id="UpdateDoctormodel">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Update data</h3>
+                    <button class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="viewing_form_update">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        $(document).ready(function () {
+            $('.updateBtnTb').click(function (e) {
+                e.preventDefault();
+
+                var id = $(this).closest('tr').find('.doctorID').text();
+                // alert(id);
+
+                $.ajax({
+                    type: "POST",
+                    url: "AdminPHPFile.php",
+                    data: {
+                        'checking_viewbtn_update': true,
+                        'id_': id,
+                    },
+                    success: function (response) {
+                        // alert(response);
+                        $('.viewing_form_update').html(response);
+                        $('#UpdateDoctormodel').modal('show');
+
+                    }
+                });
+            });
+        });
+    </script>
+
+
+
+    <!-- end update function -->
+    <!-- Delete Button Modal -->
+    <div class="modal" id="deletemodal">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Confirm Delete</h3>
+                    <button class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you confirming?</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary">Yes</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
