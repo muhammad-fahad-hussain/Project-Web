@@ -80,23 +80,22 @@ if (isset($_POST['add_doctor'])) {
 if (isset($_POST['checking_viewbtn_update'])) {
     $id = $_POST['id_'];
     $query = "SELECT * FROM doctor AS d INNER JOIN employees AS e ON d.doctor_id=e.doctor_id INNER JOIN employees_portal AS ep on ep.employee_id=e.employee_id WHERE d.doctor_id='$id'";
-    
-     $r=mysqli_query($conn,$query);
-     foreach($r as $row) 
-     {
+
+    $r = mysqli_query($conn, $query);
+    foreach ($r as $row) {
         echo '                
         <form action="" name="updateDoctorform" method="POST">
-                    <input type="text" name="doctor_id" id="update_id" value="'.$row['doctor_id'].'">
+                    <input type="text" name="doctor_id" id="update_id" value="' . $row['doctor_id'] . '">
                     <div class="row">
                         <div class="col-md-6">
                             <label for="" class="form-label" >Doctor Name:</label>
                             <input type="text" name="doctor_name_U" id="doctor_name_U" placeholder="Enter Doctor Name"
-                                class="form-control mt-2" value="'.$row['name'].'" required>
+                                class="form-control mt-2" value="' . $row['name'] . '" required>
                         </div>
                         <div class="col-md-6">
                             <label for="" class="form-label">Contact</label>
                             <input type="tel" name="doctor_phone_U" id="doctor_phone_U" placeholder="0300-3234123"
-                                class="form-control mt-2 " value="'.$row['contact'].'" required>
+                                class="form-control mt-2 " value="' . $row['contact'] . '" required>
                         </div>
                     </div>
                     
@@ -104,25 +103,25 @@ if (isset($_POST['checking_viewbtn_update'])) {
                         <div class="col-md-6">
                             <label for="" class="form-label">Date of Birth</label>
                             <input type="date" name="dob_doctor_U" id="dob_doctor_U" class="form-control mt-2"
-                                placeholder="12/12/2002" value="'.$row['dob'].'" required>
+                                placeholder="12/12/2002" value="' . $row['dob'] . '" required>
                         </div>
                         <div class="col-md-6">
                             <label for="" class="form-label">Experience</label>
                             <input type="number" placeholder="Enter Experience" name="experience_doctor_U" id="experience_doctor_U"
-                                class="form-control mt-2" value="'.$row['experience'].'" required>
+                                class="form-control mt-2" value="' . $row['experience'] . '" required>
                         </div>
 
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <label for="" class="form-label">Address</label>
-                            <input type="text" name="address_u" id="" class="form-control mt-2" value="'.$row['address'].'" placeholder="Enter Address"
+                            <input type="text" name="address_u" id="" class="form-control mt-2" value="' . $row['address'] . '" placeholder="Enter Address"
                                 required>
                         </div>
                         <div class="col-md-6">
                             <label for="" class="form-label">Education</label>
                             <input type="text" name="education_u" id="" class="form-control mt-2"
-                                placeholder="Enter Education " value="'.$row['education'].'" required>
+                                placeholder="Enter Education " value="' . $row['education'] . '" required>
                         </div>
 
 
@@ -131,12 +130,12 @@ if (isset($_POST['checking_viewbtn_update'])) {
                         <div class="col-md-6">
                             <label for="" class="form-label">Password</label>
                             <input type="text" name="password_u" id="password_doctor" class="form-control mt-2"
-                                placeholder="Choose a password" minlength="5"  value="'.$row['password'].'" required>
+                                placeholder="Choose a password" minlength="5"  value="' . $row['password'] . '" required>
                         </div>
                         <div class="col-md-6">
                             <label for="" class="form-label">Select Timing</label>
                             <select name="" id="" class="form-select text-dark mt-2"  required>
-                                <option value="'.$row['shiftTiming'].'" class="" >'.$row['shiftTiming'].'</option>
+                                <option value="' . $row['shiftTiming'] . '" class="" >' . $row['shiftTiming'] . '</option>
                                 <option value="8:00">08:00AM to 04:00PM</option>
                                 <option value="16:00">04:00AM to 12:00AM</option>
                                 <option value="23:59">12:00AM to 8:00AM</option>
@@ -147,93 +146,86 @@ if (isset($_POST['checking_viewbtn_update'])) {
                     <div class="row mt-3">
                         <div class="col-md-8">
                             <label for="" class="form-label">About</label>
-                            <textarea class="form-control" name="about_u" id="" rows="5" placeholder="" required>'.$row["about"].'</textarea>
+                            <textarea class="form-control" name="about_u" id="" rows="5" placeholder="" required>' . $row["about"] . '</textarea>
                         </div>
                     </div>
                     <input type="submit" name="UpdateDoctorform" id="" class="btn  btn-primary mt-3" onclick="UpdateDoctorform()">
                 </form>
                   
         ';
-     }
     }
-    
-    if(isset($_POST['UpdateDoctorform']))
-    {
-       $id=$_POST['doctor_id'];
-       $name=$_POST['doctor_name_U'];
-       $phone=$_POST['doctor_phone_U'];
-       $dob=$_POST['dob_doctor_U'];
-       $experience=$_POST['experience_doctor_U'];
-       $education=$_POST['education_u'];
-       $password=$_POST['password_u'];
-       $about=$_POST['about_u'];
+}
+
+if (isset($_POST['UpdateDoctorform'])) {
+    $id = $_POST['doctor_id'];
+    $name = $_POST['doctor_name_U'];
+    $phone = $_POST['doctor_phone_U'];
+    $dob = $_POST['dob_doctor_U'];
+    $experience = $_POST['experience_doctor_U'];
+    $education = $_POST['education_u'];
+    $password = $_POST['password_u'];
+    $about = $_POST['about_u'];
 
 
-       $query="UPDATE doctor SET name='$name',contact='$phone',dob='$dob',experience='$experience',education='$education',about='$about' WHERE doctor_id='$id'";
-       $result=mysqli_query($conn,$query);
-       if($result)
-       {
-           echo "update";
-       }
-       else
-       {
-           echo "not update";
-       }
-
-
-       
+    $query = "UPDATE doctor SET name='$name',contact='$phone',dob='$dob',experience='$experience',education='$education',about='$about' WHERE doctor_id='$id'";
+    $result = mysqli_query($conn, $query);
+    if ($result) {
+        echo "update";
+    } else {
+        echo "not update";
     }
 
 
-    // view
-    
+
+}
+
+
 // view
-if(isset($_POST['checking_viewbtn']))
-{
+
+// view
+if (isset($_POST['checking_viewbtn'])) {
     $id = $_POST['id_'];
-    
+
     $query = "SELECT * FROM doctor AS d INNER JOIN employees AS e ON d.doctor_id=e.doctor_id INNER JOIN employees_portal AS ep ON ep.employee_id=e.employee_id INNER JOIN department AS dept ON dept.dept_no=d.dept_no INNER JOIN speciality AS s ON s.speciality_id=d.speciality_id WHERE d.doctor_id ='$id'";
-    $result = mysqli_query($conn,$query);
-    if(mysqli_num_rows($result)>0)
-    {
-        foreach($result as $row)
-        {
+    $result = mysqli_query($conn, $query);
+    if (mysqli_num_rows($result) > 0) {
+        foreach ($result as $row) {
             // while($row=mysqli_fetch_assoc($result))
-        
-            $id=$row['doctor_id'];
-            $name=$row['name'];
+
+            $id = $row['doctor_id'];
+            $name = $row['name'];
             echo '                
             <div class="row ">
             <div class="col-md-4">
-                <img src="data:image/jpeg;base64,' . base64_encode($row['image']).'" alt="" class="img-fluid pt-3 pb-3 px-2">
+                <img src="data:image/jpeg;base64,' . base64_encode($row['image']) . '" alt="" class="img-fluid pt-3 pb-3 px-2">
             </div>
             <div class="col-md-8">
-            <p for="" class=" display-6 px-3">Doctor ID: '.$id.'</p>
+            <p for="" class=" display-6 px-3">Doctor ID: ' . $id . '</p>
                 <div class="row pt-1 px-4">
                     <div class="col-md-6 px-3">
                         <div style="font-size: 1.1em;">
                             <label for="" class="form-">Name:</label>
-                             <p class="text-muted">'.$name.'</p>
+                             <p class="text-muted">' . $name . '</p>
                         </div>
                         <div style="font-size: 1.1em;">
                             <label for="" class="form-">Speciality:</label>
-                             <p class="text-muted">'.$row['speciality_name'].'</p>
+                             <p class="text-muted">' . $row['speciality_name'] . '</p>
                         </div>
                         <div style="font-size: 1.1em;">
                             <label for="" class="form-">Experience:</label>
-                             <p class="text-muted">'.$row['experience'].'</p>
+                             <p class="text-muted">' . $row['experience'] . '</p>
                         </div>  
                         <div style="font-size: 1.1em;">
                             <label for="" class="form-">Contact:</label>
-                             <p class="text-muted">'.$row['contact'].'</p>
+                             <p class="text-muted">' . $row['contact'] . '</p>
                         </div>
                         <div style="font-size: 1.1em;">
                             <label for="" class="form-">Portal Password:</label>
-                             <p class="text-muted">'.$row['password'].'</p>
+                             <p class="text-muted">' . $row['password'] . '</p>
                         </div>
                         <div style="font-size: 1.1em;">
                             <label for="" class="form-">Address:</label>
-                             <p class="text-muted">'.$row['address'].'</p>
+                             <p class="text-muted">' . $row['address'] . '</p>
                         </div>
                                                             
                         
@@ -242,28 +234,28 @@ if(isset($_POST['checking_viewbtn']))
                     <div class="col-md-6">
                         <div style="font-size: 1.1em;">
                             <label for="" class="form-">Department:</label>
-                             <p class="text-muted">'.$row['dept_name'].'</p>
+                             <p class="text-muted">' . $row['dept_name'] . '</p>
                         </div>
                         <div style="font-size: 1.1em;">
                             <label for="" class="form-">Data of Births:</label>
-                             <p class="text-muted">'.$row['dob'].'</p>
+                             <p class="text-muted">' . $row['dob'] . '</p>
                         </div>
                         
                         <div style="font-size: 1.1em;">
                             <label for="" class="form-">Education:</label>
-                             <p class="text-muted">'.$row['education'].'</p>
+                             <p class="text-muted">' . $row['education'] . '</p>
                         </div>
                         <div style="font-size: 1.1em;">
                             <label for="" class="form-">Salary:</label>
-                             <p class="text-muted">RS: '.$row['salary'].'</p>
+                             <p class="text-muted">RS: ' . $row['salary'] . '</p>
                         </div>
                         <div style="font-size: 1.1em;">
                             <label for="" class="form-">Timing:</label>
-                             <p class="text-muted">'.$row['shiftTiming'].'</p>
+                             <p class="text-muted">' . $row['shiftTiming'] . '</p>
                         </div>
                         <div style="font-size: 1.1em;">
                             <label for="" class="form-">Gender:</label>
-                             <p class="text-muted">'.$row['gender'].'</p>
+                             <p class="text-muted">' . $row['gender'] . '</p>
                         </div>
                         
                     </div>
@@ -271,7 +263,7 @@ if(isset($_POST['checking_viewbtn']))
                 </div>
                 <div style="font-size: 1.1em;" class="mt-3 px-4">
                     <label for="" class="pb-2 display-6">About:</label>
-                     <p style="font-size: 1em;" class="text-muted">'.$row['about'].'</p>
+                     <p style="font-size: 1em;" class="text-muted">' . $row['about'] . '</p>
                 </div>
             </div>
         </div>
@@ -279,8 +271,41 @@ if(isset($_POST['checking_viewbtn']))
             ';
 
         }
-        
-  }      
+
+    }
+}
+
+// delete doctor
+
+if (isset($_POST['checking_delete_btn'])) {
+    $id = $_POST['id_'];
+    $query = "SELECT * FROM doctor AS d INNER JOIN employees AS e ON d.doctor_id=e.doctor_id INNER JOIN employees_portal AS ep on ep.employee_id=e.employee_id WHERE d.doctor_id='$id'";
+    $result = mysqli_query($conn, $query);
+    if (mysqli_num_rows($result) > 0) {
+        foreach ($result as $row) {
+            // while($row=mysqli_fetch_assoc($result))
+            echo ' 
+            <form action="AdminPHPFile.php" method="POST">
+              <input type="hidden" name="d_ID" id="d_ID" value="'. $row['doctor_id'].'">
+              <input name="delete_doctor" type="submit" class="btn btn-primary"  value="Yes">
+              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+            </form>
+            ';
+
+        }
+
+    }
+}
+
+if (isset($_POST['delete_doctor'])) {
+    $id = $_POST['d_ID'];
+    $query = "DELETE FROM doctor WHERE doctor_id= '$id'";
+    $result = mysqli_query($conn, $query);
+    if ($result) {
+        echo "Employee Deleted Successfully";
+    } else {
+        echo "Employee Delete Failed";
+    }
 }
 
 

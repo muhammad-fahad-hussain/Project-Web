@@ -14,6 +14,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
     <title>Admin Portal</title>
 
 </head>
@@ -439,8 +443,7 @@
                             <td class="paddingRowImg">
                             <button class="btn btn-success text-center viewBtnTb">View</button>
                             <button class="btn btn-primary text-center mx-2 updateBtnTb">Edit</button>
-                                <button class="btn btn-danger" data-bs-toggle="modal"
-                                    data-bs-target="#deletemodal">Delete</button>
+                                <button class="btn btn-danger delete_btnTB" >Delete</button>
                             </td>
                         </tr>';
                         }
@@ -542,10 +545,9 @@
             });
         });
     </script>
-
-
-
     <!-- end update function -->
+
+
     <!-- Delete Button Modal -->
     <div class="modal" id="deletemodal">
         <div class="modal-dialog modal-md">
@@ -557,13 +559,45 @@
                 <div class="modal-body">
                     <p>Are you confirming?</p>
                 </div>
+
                 <div class="modal-footer">
-                    <button class="btn btn-primary">Yes</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+                    <div class="viewing_form_delete">
+                        
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>
-</body>
+
+
+    <script>
+
+        $(document).ready(function () {
+            $('.delete_btnTB').click(function (e) {
+                e.preventDefault();
+
+                var id = $(this).closest('tr').find('.doctorID').text();
+                // alert(id);
+
+                $.ajax({
+                    type: "POST",
+                    url: "AdminPHPFile.php",
+                    data: {
+                        'checking_delete_btn': true,
+                        'id_': id,
+                    },
+                    success: function (response) {
+                        // alert(response);
+                        $('.viewing_form_delete').html(response);
+                        $('#deletemodal').modal('show');
+
+                    }
+                });
+            });
+        });
+    </script>
+    
+    </body>
 
 </html>
