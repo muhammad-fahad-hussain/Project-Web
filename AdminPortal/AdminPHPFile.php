@@ -1,4 +1,6 @@
 <?php
+
+session_start();
 include "connection.php";
 
 /* ==================================================================================================================
@@ -38,10 +40,10 @@ if (isset($_POST['add_doctor'])) {
 
     $job_role = "doctor";
     $salary = 100000;
-    $emp_id = rand(1000, 9999);
+    $emp_id = rand(1000, 5000);
     $shiftTiming = $_POST['shiftTiming'];
     $password = $_POST['password_doctor'];
-    $p_id = rand(1000, 9999);
+    $p_id = rand(1000, 5000);
 
     // if($img)
     // {
@@ -52,24 +54,27 @@ if (isset($_POST['add_doctor'])) {
     //     echo "error";
 
     // }
-    $query1 = "INSERT INTO doctor VALUES('$id','$name','$doctor_phone','$dob','$experience','$education','$address_doctor','$img','$gender','$about','$speciality','$department')";
+    $query1 = "INSERT INTO doctor VALUES('$id','$name','$doctor_phone','$dob','$experience','$education','$address_doctor','$img','$gender',
+    '$about','$speciality','$department')";
     $result1 = mysqli_query($conn, $query1);
     if ($result1) {
         // employee
-        $query2 = "INSERT INTO employees (employee_id,job_role,salary,shiftTiming,doctor_id) VALUES('$emp_id','$job_role','$salary','$shiftTiming','$id')";
+        $query2 = "INSERT INTO employees (employee_id,job_role,salary,shiftTiming,doctor_id) 
+        VALUES('$emp_id','$job_role','$salary','$shiftTiming','$id')";
         $result2 = mysqli_query($conn, $query2);
         // emp_portal
-        $query3 = "INSERT INTO employees_portal (portal_id,employee_id,password) VALUES('$p_id','$emp_id','$password')";
+        $query3 = "INSERT INTO employees_portal (portal_id,employee_id,password) VALUES('$emp_id','$emp_id','$password')";
         $result3 = mysqli_query($conn, $query3);
 
 
         if ($result3) {
-            echo "insert";
+            $_SESSION['doctorAdminAlert'] = "Add the doctor successfully";
+            header("Location: doctorAdmin.php");
         }
 
     } else {
-        echo "error1";
-
+        $_SESSION['doctorAdminAlert'] = "Not added the doctor successfully";
+        header("Location: doctorAdmin.php");
     }
 
 
@@ -84,8 +89,8 @@ if (isset($_POST['checking_viewbtn_update'])) {
     $r = mysqli_query($conn, $query);
     foreach ($r as $row) {
         echo '                
-        <form action="" name="updateDoctorform" method="POST">
-                    <input type="text" name="doctor_id" id="update_id" value="' . $row['doctor_id'] . '">
+        <form action="AdminPHPFile.php" name="updateDoctorform" method="POST">
+                    <input type="hidden" name="doctor_id" id="update_id" value="' . $row['doctor_id'] . '">
                     <div class="row">
                         <div class="col-md-6">
                             <label for="" class="form-label" >Doctor Name:</label>
@@ -132,16 +137,7 @@ if (isset($_POST['checking_viewbtn_update'])) {
                             <input type="text" name="password_u" id="password_doctor" class="form-control mt-2"
                                 placeholder="Choose a password" minlength="5"  value="' . $row['password'] . '" required>
                         </div>
-                        <div class="col-md-6">
-                            <label for="" class="form-label">Select Timing</label>
-                            <select name="" id="" class="form-select text-dark mt-2"  required>
-                                <option value="' . $row['shiftTiming'] . '" class="" >' . $row['shiftTiming'] . '</option>
-                                <option value="8:00">08:00AM to 04:00PM</option>
-                                <option value="16:00">04:00AM to 12:00AM</option>
-                                <option value="23:59">12:00AM to 8:00AM</option>
-                                <option value="Emergency">Emergency</option>
-                            </select>
-                        </div>
+                       
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-8">
@@ -165,18 +161,21 @@ if (isset($_POST['UpdateDoctorform'])) {
     $education = $_POST['education_u'];
     $password = $_POST['password_u'];
     $about = $_POST['about_u'];
+    $address_u = $_POST['address_u'];
+    $shiftTiming = $_POST['shiftTiming'];
 
 
-    $query = "UPDATE doctor SET name='$name',contact='$phone',dob='$dob',experience='$experience',education='$education',about='$about' WHERE doctor_id='$id'";
+    $query = "UPDATE doctor SET name='$name',contact='$phone',dob='$dob',address='$address_u',experience='$experience',education='$education',about='$about' WHERE doctor_id='$id'";
+    $result = mysqli_query($conn, $query);
+    // $query = "UPDATE employees SET shiftTiming='$shiftTiming' WHERE doctor_id='$id'";
     $result = mysqli_query($conn, $query);
     if ($result) {
-        echo "update";
+        $_SESSION['doctorAdminAlert'] = "Update the record successfully";
+        header("Location: doctorAdmin.php");
     } else {
-        echo "not update";
+        $_SESSION['doctorAdminAlert'] = "Update the record successfully";
+        header("Location: doctorAdmin.php");
     }
-
-
-
 }
 
 
@@ -186,7 +185,10 @@ if (isset($_POST['UpdateDoctorform'])) {
 if (isset($_POST['checking_viewbtn'])) {
     $id = $_POST['id_'];
 
-    $query = "SELECT * FROM doctor AS d INNER JOIN employees AS e ON d.doctor_id=e.doctor_id INNER JOIN employees_portal AS ep ON ep.employee_id=e.employee_id INNER JOIN department AS dept ON dept.dept_no=d.dept_no INNER JOIN speciality AS s ON s.speciality_id=d.speciality_id WHERE d.doctor_id ='$id'";
+    $query = "SELECT * FROM doctor AS d INNER JOIN employees AS e ON d.doctor_id=e.doctor_id INNER JOIN employees_portal AS ep 
+    ON ep.employee_id=e.employee_id INNER JOIN department AS dept ON dept.dept_no=d.dept_no INNER JOIN speciality AS s ON 
+    s.speciality_id=d.speciality_id WHERE d.doctor_id ='$id'";
+
     $result = mysqli_query($conn, $query);
     if (mysqli_num_rows($result) > 0) {
         foreach ($result as $row) {
@@ -250,7 +252,7 @@ if (isset($_POST['checking_viewbtn'])) {
                              <p class="text-muted">RS: ' . $row['salary'] . '</p>
                         </div>
                         <div style="font-size: 1.1em;">
-                            <label for="" class="form-">Timing:</label>
+                            <label for="" class="form-">Start Timing:</label>
                              <p class="text-muted">' . $row['shiftTiming'] . '</p>
                         </div>
                         <div style="font-size: 1.1em;">
@@ -286,7 +288,7 @@ if (isset($_POST['checking_delete_btn'])) {
             // while($row=mysqli_fetch_assoc($result))
             echo ' 
             <form action="AdminPHPFile.php" method="POST">
-              <input type="hidden" name="d_ID" id="d_ID" value="'. $row['doctor_id'].'">
+              <input type="hidden" name="d_ID" id="d_ID" value="' . $row['doctor_id'] . '">
               <input name="delete_doctor" type="submit" class="btn btn-primary"  value="Yes">
               <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
             </form>
@@ -302,9 +304,162 @@ if (isset($_POST['delete_doctor'])) {
     $query = "DELETE FROM doctor WHERE doctor_id= '$id'";
     $result = mysqli_query($conn, $query);
     if ($result) {
-        echo "Employee Deleted Successfully";
+        $_SESSION['doctorAdminAlert'] = "Deleted the record successfully";
+        header("Location: doctorAdmin.php");
     } else {
-        echo "Employee Delete Failed";
+        $_SESSION['doctorAdminAlert'] = "Employee Delete Failed";
+        header("Location: doctorAdmin.php");
+    }
+}
+
+
+// for the searching doctor
+if (isset($_POST['searching_doctor'])) {
+    $search = $_POST['search'];
+    $query = "SELECT * FROM doctor WHERE name LIKE '%" . $search . "%' OR doctor_id LIKE '%" . $search . "%'";
+    $result = mysqli_query($conn, $query);
+    // Check if any results were found
+    if (mysqli_num_rows($result) > 0) {
+        // Loop through each row of the result
+        while ($row = mysqli_fetch_assoc($result)) {
+            // Access individual columns of each row
+            $doctorName = $row['name'];
+            $doctorId = $row['doctor_id'];
+
+            // Perform any actions or display the retrieved data
+            echo "Doctor ID: " . $doctorId . "<br>";
+            echo "<br>";
+        }
+    } else {
+        echo "No results found.";
+    }
+}
+
+
+
+/* ==================================================================================================================
+                                                Receptionist 
+   ==================================================================================================================*/
+
+
+if (isset($_POST['receptionist_add'])) {
+    $recp_id = rand(1000, 9999);
+    $name = $_POST['name'];
+    $contact = $_POST['contact'];
+    $dob = $_POST['dob'];
+    $address = $_POST['address'];
+    $gender = $_POST['gender'];
+
+    $emp_id = rand(5001, 7000);
+    $job_role = "receptionist";
+    $salary = 50000;
+    $shiftTiming = $_POST['shiftTiming'];
+    $password = $_POST['password'];
+    $query1 = "INSERT INTO receptionist(receptionist_id,name,contact,dob,address,gender)  VALUES('$recp_id','$name',' $contact','$dob','$address','$gender')";
+    $result1 = mysqli_query($conn, $query1);
+    if ($query1) {
+        // insert employees table
+        $query2 = "INSERT INTO employees(employee_id,job_role,salary,shiftTiming,receptionist_id) VALUES('$emp_id','$job_role','$salary','$shiftTiming','$recp_id')";
+        $result2 = mysqli_query($conn, $query2);
+        // insert employees_portal table
+        $query3 = "INSERT INTO employees_portal(portal_id ,employee_id ,password) VALUES('$emp_id','$emp_id','$password')";
+        $result3 = mysqli_query($conn, $query3);
+        if ($result2) {
+            $_SESSION['receptionistAdminAlert'] = "Add the record successfully";
+            header("Location: ReceptionistAdmin.php");
+
+
+        }
+    } else {
+        // echo "e";
+        $_SESSION['receptionistAdminAlert'] = "Remove the Doctor successfully";
+        header("Location: ReceptionistAdmin.php");
+    }
+
+}
+
+
+// update
+
+// update
+if (isset($_POST['checking_Recp_update_btn'])) {
+    $id = $_POST['id_'];
+    $result_array = [];
+    $read = "SELECT * FROM receptionist as r inner join employees as e on r.receptionist_id =e.receptionist_id 
+    inner join employees_portal as ep on e.employee_id =ep.employee_id";
+    $result = mysqli_query($conn, $read);
+    if (mysqli_num_rows($result) > 0) {
+        foreach ($result as $row) {
+            array_push($result_array, $row);
+        }
+
+        header('Content-type: application/json');
+        echo json_encode($result_array);
+    }
+}
+
+if (isset($_POST['recp_update_btn'])) {
+
+    $id = $_POST['receptionist_id'];
+
+    $name = $_POST['update_name'];
+    $contact = $_POST['update_contact'];
+    $dob = $_POST['update_dob'];
+    $address = $_POST['update_address'];
+    $password = $_POST['update_password'];
+
+    $query = "UPDATE receptionist SET name='$name',  contact='$contact', dob='$dob', address='$address' WHERE receptionist_id=$id";
+    $result = mysqli_query($conn, $query);
+
+    if ($result) {
+        $query1 = "UPDATE employees as e inner join employees_portal as ep SET ep.password='$password' WHERE e.receptionist_id=$id";
+        $result1 = mysqli_query($conn, $query1);
+        if ($result1) {
+            $_SESSION['receptionistAdminAlert'] = "Successfull Update";
+
+            header('Location: ReceptionistAdmin.php');
+            exit();
+        }
+
+    } else {
+        $_SESSION['receptionistAdminAlert'] = "Not Update";
+        header('Location: ReceptionistAdmin.php');
+    }
+}
+
+// delete
+if (isset($_POST['checking_recp_delete_btn'])) {
+    $id = $_POST['id_'];
+    $result_array = [];
+    $read = "SELECT * FROM receptionist as r inner join employees as e on r.receptionist_id =e.receptionist_id 
+    inner join employees_portal as ep on e.employee_id =ep.employee_id";
+    $result = mysqli_query($conn, $read);
+    if (mysqli_num_rows($result) > 0) {
+        foreach ($result as $row) {
+            array_push($result_array, $row);
+        }
+
+        header('Content-type: application/json');
+        echo json_encode($result_array);
+    }
+}
+
+if (isset($_POST['recp_delete_btn'])) {
+
+    $id = $_POST['receptionist_id1'];
+
+    $query1 = "DELETE FROM  receptionist WHERE receptionist_id ='$id'";
+    $result = mysqli_query($conn, $query1);
+
+    if ($result) {
+
+        $_SESSION['receptionistAdminAlert'] = "Successfull Delete";
+        header('Location: ReceptionistAdmin.php');
+
+
+    } else {
+        $_SESSION['receptionistAdminAlert'] = "Not Delete";
+        header('Location: ReceptionistAdmin.php');
     }
 }
 

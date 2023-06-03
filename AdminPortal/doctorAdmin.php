@@ -1,3 +1,18 @@
+<?php
+session_start();
+
+include "connection.php";
+$time = time();
+if ($time > $_SESSION['expire']) {
+    $_SESSION['signin'] = "Your are session is expire";
+    session_unset();
+    session_destroy();
+    header("Location: signinportal.php");
+
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,8 +27,6 @@
     <script src="bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -60,8 +73,10 @@
     <div class="offcanvas offcanvas-start sidebar-nav bg-dark" id="sidebar" style="scroll-snap-type: none;">
         <div class="offcanvas-body px-0">
             <nav class="navbar-dark">
-                <h4 class="mt-5 text-center text-white"> <span
-                        class="text-center text-primary">Welcome</span><br><span>Admin Name</span></h4>
+                <h4 class="mt-5 text-center text-white"> <span class="text-center text-primary">Welcome</span><br><span>
+                        <?php echo $_SESSION['name']
+                            ?>
+                    </span></h4>
                 <hr class="dropdown-divider bg-light mt-5">
                 <ul class="navbar-nav ">
                     <li>
@@ -133,7 +148,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="nav-link px-3">
+                        <a href="logout.php" class="nav-link px-3">
                             <i class="far fa-sign-out">
                                 <span class="mx-1">Logout</span>
                         </a>
@@ -200,8 +215,22 @@
                             <div class="col-md-6">
                                 <label for="" class="form-label">Select Speciality</label>
                                 <select name="speciality" id="speciality" class="form-select text-dark mt-2" required>
-                                    <option value="Select Speciality" class="" selected>Select
+                                    <option value="" class="" selected>Select
                                         Speciality</option>
+                                    <?php
+                                    if (isset($_POST['department'])) {
+                                        $dept_no = $_POST['department'];
+                                        $query = " SELECT s.speciality_id,s.speciality_name from speciality as s inner join department as d 
+                                            on s.dept_no=d.dept_no where d.dept_no= '$dept_no'";
+                                        $result = mysqli_query($conn, $query);
+
+                                        foreach ($result as $row) {
+                                            '<option value="' . $row['speciality_id'] . '" >' . $row['speciality_name'] . '</option>
+                                                ';
+                                        }
+                                    }
+
+                                    ?>
                                     <script>
                                         $(document).ready(function () {
                                             $('#department').on('change', function (event) {
@@ -264,15 +293,12 @@
                                 <label for="" class="form-label">Select Timing</label>
                                 <select name="shiftTiming" id="shiftTiming" class="form-select text-dark mt-2" required>
 
-                                    <option value="Select Speciality" class="" selected>Select
-                                        Timing</option>
+                                    <option value="Select Speciality" class="" selected>Select Timing</option>
                                     <option value="8:00">08:00AM to 04:00PM</option>
                                     <option value="16:00">04:00AM to 12:00AM</option>
                                     <option value="23:59">12:00AM to 8:00AM</option>
-                                    <option value="Emergency">Emergency</option>
                                 </select>
                             </div>
-
                         </div>
 
                         <div class="row mt-3">
@@ -333,6 +359,21 @@
                 </div>
                 <!-- Horizantal line -->
                 <hr class="dropdown-divider bg-light my-4">
+
+                <!-- alert  for show the message-->
+
+
+                <?php
+                if (isset($_SESSION['doctorAdminAlert'])) {
+                    ?>
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <?php echo $_SESSION["doctorAdminAlert"] ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+                    </div>
+                    <?php
+                    unset($_SESSION['doctorAdminAlert']);
+                }
+                ?>
                 <!-- Doctor Box -->
                 <div class="row row-cols-1 row-cols-lg-3 g-5 p-3">
                     <div class="col">
@@ -343,7 +384,16 @@
                                         <i class="fal fa-user-md fa-lg" style="color: #c0c7d3;"></i>
                                     </span>
                                     <span class=" ms-auto">
-                                        <h3 class="display-3">5</h3>
+                                        <!-- using php in card fortotal dcotor  -->
+
+                                        <?php
+                                        include "connection.php";
+
+                                        $q = "SELECT COUNT(doctor_id) FROM doctor";
+                                        $result = mysqli_query($conn, $q);
+                                        $row = mysqli_fetch_array($result);
+                                        echo ' <h3 class="display-3">' . $row[0] . '</h3>';
+                                        ?>
                                     </span>
                                 </h3>
                                 <h3 class="card-text mt-4 font-weight-bold text-white">Total Doctors</h3>
@@ -358,10 +408,30 @@
                                         <i class="fal fa-user-md fa-lg" style="color: #c0c7d3;"></i>
                                     </span>
                                     <span class=" ms-auto">
-                                        <h3 class="display-3 text-white">2</h3>
+                                        <?php
+                                        include "connection.php";
+                                        $shiftTime = "";
+                                        $time = date("H:i:s", time());
+                                        $t8 = strtotime("8:00");
+                                        $t16 = strtotime("16:00");
+                                        $t24 = strtotime("23:59");
+                                        if ($time > $t8 && $time < $t16) {
+                                            $shiftTime = "8:00";
+                                        } else if ($time > $t16 && $time < $t24) {
+                                            $shiftTime = "16:00";
+                                        } else {
+                                            $shiftTime = "23:59";
+                                        }
+
+                                        $q = "SELECT COUNT(d.doctor_id) FROM doctor AS d INNER JOIN employees AS e on d.doctor_id=e.doctor_id 
+                                        WHERE shiftTiming='$shiftTime'";
+                                        $result = mysqli_query($conn, $q);
+                                        $row = mysqli_fetch_array($result);
+                                        echo ' <h3 class="display-3 text-white">' . $row[0] . '</h3>';
+                                        ?>
                                     </span>
                                 </h3>
-                                <h3 class="card-text mt-4 font-weight-bold text-white">Active Doctors</h3>
+                                <h3 class="card-text mt-4 font-weight-bold text-white">Available Doctors</h3>
                             </div>
                         </div>
                     </div>
@@ -374,7 +444,16 @@
                                         <i class="fas fa-building fa-lg" style="color: #c0c7d3;"></i>
                                     </span>
                                     <span class=" ms-auto">
-                                        <h3 class="display-3 text-white">2</h3>
+                                        <!-- using php in card fortotal dcotor  -->
+
+                                        <?php
+                                        include "connection.php";
+
+                                        $q = "SELECT COUNT(dept_no) FROM department";
+                                        $result = mysqli_query($conn, $q);
+                                        $row = mysqli_fetch_array($result);
+                                        echo ' <h3 class="display-3 text-white">' . $row[0] . '</h3>';
+                                        ?>
                                     </span>
                                 </h3>
                                 <h3 class="card-text mt-4 font-weight-bold text-white">Total Departments</h3>
@@ -394,11 +473,11 @@
                                 Doctor</a>
                         </div>
                         <div class="col-lg-8">
-                            <form action="">
+                            <form action="AdminPHPFile.php" method="POST">
                                 <div class="d-flex align-items-center justify-content-center">
-                                    <input type="text" name="" id="" class="form-control w-75 "
-                                        placeholder="Search Doctor">
-                                    <input type="button" name="" id="" class="btn btn-primary mx-4"
+                                    <input type="text" name="search" id="" class="form-control w-75 "
+                                        placeholder="Search Doctor name  or id">
+                                    <input type="submit" name="searching_doctor" id="" class="btn btn-primary mx-4"
                                         value="Search"></input>
                                 </div>
                             </form>
@@ -448,7 +527,6 @@
                         </tr>';
                         }
                         ?>
-
 
                     </table>
                 </div>
@@ -562,7 +640,7 @@
 
                 <div class="modal-footer">
                     <div class="viewing_form_delete">
-                        
+
                     </div>
                 </div>
 
@@ -597,7 +675,7 @@
             });
         });
     </script>
-    
-    </body>
+
+</body>
 
 </html>
