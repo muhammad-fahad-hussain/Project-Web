@@ -1,3 +1,18 @@
+<?php
+session_start();
+
+include "connection.php";
+$time=time();
+if($time>$_SESSION['expire'])
+{
+    session_unset();
+    session_destroy();
+    header("Location: signinportal.php");
+    $_SESSION['signin']="Your are session is expire";
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,8 +20,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/bootstrap-5.1.3-dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/DoctorPortal/doctorPortal.css">
+    <link rel="stylesheet" href="bootstrap-5.1.3-dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="doctorPortal.css">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
     <title>Admin Portal</title>
     <style>
@@ -238,11 +253,11 @@
         </div>
     </main>
 
-    <script src="/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
-    <script src="/bootstrap-5.1.3-dist/js/jquery-3.5.1.js"></script>
-    <script src="/bootstrap-5.1.3-dist/js/jquery.dataTables.min.js"></script>
-    <script src="/bootstrap-5.1.3-dist/js/dataTables.bootstrap5.min.js"></script>
+    <script src="bootstrap-5.1.3-dist/js/jquery-3.5.1.js"></script>
+    <script src="bootstrap-5.1.3-dist/js/jquery.dataTables.min.js"></script>
+    <script src="bootstrap-5.1.3-dist/js/dataTables.bootstrap5.min.js"></script>
 </body>
 
 </html>
