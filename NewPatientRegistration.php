@@ -1,3 +1,9 @@
+<?php
+session_start();
+include "connection.php";
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,8 +13,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="bootstrap-5.1.3-dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
-  <link rel="stylesheet" href="/CSS/mainpage.css">
-  <script src="/Javascript/scripts.js"></script>
+  <link rel="stylesheet" href="CSS/mainpage.css">
+  <script src="Javascript/scripts.js"></script>
 
 
 
@@ -257,29 +263,43 @@
               <div class="card-body border">
                 <div class="container">
                   <!-- form -->
-
-                  <form action="" name="newPatientRegistration">
+                  <!-- using alert for show the status -->
+                  <?php
+                  if (isset($_SESSION['RegistratedStatus'])) { ?>
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                      <?php
+                      echo $_SESSION['RegistratedStatus']
+                        ?>
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php
+                    unset($_SESSION['RegistratedStatus']);
+                  }
+                  ?>
+                  <!-- end  -->
+                  <form action="main.php" name="newPatientRegistration" method="POST">
                     <div class="row">
+
                       <div class="col-md-6">
                         <div class="mt-3">
                           <label for="" class="form-label">Full Name</label>
-                          <input type="text" name="" id="reg_name" class="form-control" placeholder="Enter Full Name"
-                            required>
+                          <input type="text" name="name" id="reg_name" class="form-control"
+                            placeholder="Enter Full Name" required>
                         </div>
                         <div class="mt-3">
                           <label for="" class="form-label">Email ID</label>
-                          <input type="email" name="" id="" class="form-control" placeholder="email@example.com"
+                          <input type="email" name="email" id="" class="form-control" placeholder="email@example.com"
                             required>
                         </div>
                         <div class="mt-3">
                           <label for="" class="form-label">Contact</label>
-                          <input type="tel" name="" id="contact_Reg" class="form-control" placeholder="Enter Contact No"
-                            required>
+                          <input type="tel" name="contact" id="contact_Reg" class="form-control"
+                            placeholder="Enter Contact No" required>
                         </div>
                         <div class="mt-3">
                           <label for="form-label">Date of Birth</label>
                           <div class="input-group mt-2">
-                            <input type="date" class="form-control" placeholder="dd/MM/yyyy" id="DOB_reg" required>
+                            <input type="date" class="form-control" name="dob" id="DOB_reg" required>
                             <!-- <button class="btn btn-outline-secondary" type="button" id="button-addon1"><i
                                 class="fas fa-calendar-alt"></i></button> -->
                           </div>
@@ -290,24 +310,22 @@
                       <div class="col-md-6 border-left">
                         <div class="mt-3">
                           <label for="" class="form-label">Password</label>
-                          <input type="text" name="" id="password_patient" class="form-control" placeholder="Enter Password" min="8"
-                            required>
+                          <input type="text" name="password" id="password_patient" class="form-control"
+                            placeholder="Enter Password" min="8" required>
                         </div>
                         <div class="mt-3">
                           <label for="" class="form-label">Gender</label>
                           <div class="row">
                             <div class="col-sm-2">
                               <div class="form-check">
-                                <input type="radio" name="genderRadioBtn" id="" class="form-check-input"
-                                  value="option1">
+                                <input type="radio" name="gender" id="" class="form-check-input" value="male">
                                 <label for="" class="form-check-label">Male</label>
                               </div>
 
                             </div>
                             <div class="col-sm-2">
                               <div class="form-check">
-                                <input type="radio" name="genderRadioBtn" id="" class="form-check-input"
-                                  value="option2">
+                                <input type="radio" name="gender" id="" class="form-check-input" value="female">
                                 <label for="" class="form-check-label">Female</label>
 
                               </div>
@@ -319,8 +337,8 @@
                           <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" required>
                           <label class="form-check-label" for="flexCheckDefault">I Agree</label>
                         </div>
-                        <input type="submit" class="btn btn-primary mt-3" onclick="NewPatientRegistration()"
-                          value="Submit">
+                        <input type="submit" class="btn btn-primary mt-3" name="registrationBtn"
+                          onclick="NewPatientRegistration()" value="Registrated">
                       </div>
                     </div>
                   </form>
@@ -475,8 +493,7 @@
   <script src="bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
   <script src="bootstrap-5.1.3-dist/js/jquery-3.5.1.js"></script>
-  <script src="bootstrap-5.1.3-dist/js/jquery.dataTables.min.js"></script>
-  <script src="bootstrap-5.1.3-dist/js/dataTables.bootstrap5.min.js"></script>
+
 </body>
 
 </html>

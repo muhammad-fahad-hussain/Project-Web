@@ -148,7 +148,8 @@ VALUES
   (34, 'Family Medicine', 4),
   (35, 'Occupational Therapy', 14);
 
-  select s.speciality_id,s.speciality_name from speciality as s inner join department as d on s.dept_no=d.dept_no;
+  select s.speciality_id,s.speciality_name from speciality as s inner join department as d 
+  on s.dept_no=d.dept_no where d.dept_no=3;
   
   select d.dept_name,COUNT(s.speciality_name) from speciality s inner join department d 
   on d.dept_no=s.dept_no group by dept_name having COUNT(s.speciality_name)>2;
@@ -156,3 +157,76 @@ VALUES
   
   select d.dept_name,s.speciality_name,s.speciality_id from speciality s inner join department d 
   on d.dept_no=s.dept_no where s.dept_no=5;
+
+  create table admin
+(
+    admin_id int primary key,
+    name varchar(50),
+    password varchar(50)
+        
+);
+INSERT INTO admin(admin_id, name, password) VALUES ('37125','Muhammad Fahad','123456');
+
+--patient table
+create table patient
+(
+patient_no int primary key,
+patient_name varchar(50),
+email varchar(50) unique,
+contact varchar(13) unique,
+dob date,
+gender varchar(6)
+
+);
+
+create table appointmentTime
+(
+time_no int primary key,
+time time,
+appointment_token_no int
+);
+INSERT INTO appointmentTime (time_no, time, appointment_token_no)
+VALUES
+    (1, '08:00:00', 1),
+    (2, '08:30:00', 2),
+    (3, '09:00:00', 3),
+    (4, '09:30:00', 4),
+    (5, '10:00:00', 5),
+    (6, '10:30:00', 6),
+    (7, '11:00:00', 7),
+    (8, '11:30:00', 8),
+    (9, '12:00:00', 9),
+    (10, '12:30:00', 10),
+    (11, '13:00:00', 11),
+    (12, '13:30:00', 12),
+    (13, '14:00:00', 13),
+    (14, '14:30:00', 14),
+    (15, '15:00:00', 15),
+    (16, '15:30:00', 16);
+create table patient_portal
+(
+portal_no int primary key,
+patient_no int,
+password varchar(50),
+foreign key (patient_no) references patient(patient_no) on delete cascade on update cascade
+);
+
+
+create table appointmentPortal
+(
+ appointmentNo int primary key, --AUTO_INCREMENT,
+ appointment_date date,
+ status varchar(50),
+ message text,
+
+ dept_no int,
+ time_no int,
+ patient_no int,
+ doctor_id int,
+
+  foreign key (dept_no) references department(dept_no),
+  foreign key (time_no) references appointmentTime(time_no),
+  foreign key (patient_no) references patient(patient_no),
+  foreign key (doctor_id) references doctor(doctor_id)
+
+);

@@ -1,3 +1,18 @@
+<?php
+session_start();
+$patient_no = $_SESSION['patient_no'];
+include "connection.php";
+// echo  $_SESSION['patient_no'];
+$time = time();
+if ($time > $_SESSION['end']) {
+    session_unset();
+    session_destroy();
+    header("Location: signinpatient.php");
+    $_SESSION['signin'] = "Your are session is expire";
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,7 +21,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="bootstrap-5.1.3-dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/CSS/patientportal.css">
+    <link rel="stylesheet" href="CSS/patientportal.css">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
 
     <title>Patient Portal</title>
@@ -27,7 +42,7 @@
                 aria-controls="offcanvasExample">
                 <span class="navbar-toggler-icon" data-bs-target="#sidebar"></span>
             </button>
-            <a class="navbar-brand mx-4 text-uppercase fw-bold" href="#">Patient Name</a>
+            <h3 class="mt-5 text-center text-white"><?php echo $_SESSION['patient_name'] ?></h3>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavBar"
                 aria-controls="topNavBar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -59,11 +74,24 @@
     <div class="offcanvas offcanvas-start sidebar-nav bg-dark" id="sidebar">
         <div class="offcanvas-body ">
             <nav class="navbar-dark">
-                <h3 class="mt-5 text-center text-white">Patient Name</h3>
+                
+
+                <!-- using php for show the name -->
+                <?php
+                
+                // $name="SELECT name FROM patient WHERE patient_no=$patient_no";
+            
+                // $patient_no;
+                // $sql = "SELECT * FROM  patient as d  WHERE patient_no = '$patient_no'";
+                // $result = mysqli_query($conn, $sql);
+                // $row = mysqli_fetch_assoc($result); ?>
+                 <h3 class="mt-5 text-center text-white"><?php echo $_SESSION['patient_name'] ?></h3>
+                
+               
                 <hr class="dropdown-divider bg-light mt-5">
                 <ul class="navbar-nav">
                     <li>
-                        <a href="/patientportal.html" class="nav-link px-3 active mt-5">
+                        <a href="patientportal.php" class="nav-link px-3 active mt-5">
                             <i class="fas fa-tachometer-alt-average"></i>
                             <span class="mx-1">Dashboard</span>
                         </a>
@@ -82,7 +110,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/patientportalappointment.html" class="nav-link px-3">
+                        <a href="patientportalappointment.php" class="nav-link px-3">
                             <i class="fal fa-calendar-check"></i>
                             <span class="mx-1">Make Appointment</span>
                         </a>
@@ -106,7 +134,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="nav-link px-3">
+                        <a href="AdminPortal/logout.php" class="nav-link px-3">
                             <i class="far fa-sign-out">
                                 <span class="mx-1">Logout</span>
                         </a>
@@ -247,11 +275,9 @@
             </div>
         </div>
     </main>
-    <script src="./bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
-    <script src="./bootstrap-5.1.3-dist/js/jquery-3.5.1.js"></script>
-    <script src="./bootstrap-5.1.3-dist/js/jquery.dataTables.min.js"></script>
-    <script src="./bootstrap-5.1.3-dist/js/dataTables.bootstrap5.min.js"></script>
+    <script src="bootstrap-5.1.3-dist/js/jquery-3.5.1.js"></script>
 </body>
 
 </html>
