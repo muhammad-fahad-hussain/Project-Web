@@ -1,0 +1,34 @@
+.Navigation-appointment {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: linear-gradient(to right, #51478a, #3f7897, #16aeb9);
+  color: white;
+}
+
+.logo {
+  margin: 0;
+  color: white;
+}
+
+.Navigation-btn {
+  color: white;
+  text-decoration: none;
+  margin-left: 1rem;
+}
+
+.custom-navbar {
+  background: linear-gradient(to right, #51478a, #3f7897, #16aeb9);
+}
+
+.hero-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 5rem 0;
+  text-align: center;
+}
+
+.services-section {
+  padding: 3rem 0;
+}
